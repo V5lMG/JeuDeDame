@@ -1,4 +1,4 @@
-package iut.sae.jeudedame.objets;
+package fr.iutrodez.jeudedame.modele.objets;
 
 import java.util.ArrayList;
 import java.util.List;

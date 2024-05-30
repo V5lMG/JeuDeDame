@@ -2,8 +2,10 @@ module iut.sae.jeudedame {
     requires javafx.controls;
     requires javafx.fxml;
 
-    requires org.kordamp.bootstrapfx.core;
-
-    opens iut.sae.jeudedame to javafx.fxml;
-    exports iut.sae.jeudedame;
+    exports fr.iutrodez.jeudedame.controller;
+    opens fr.iutrodez.jeudedame.controller to javafx.fxml;
+    exports fr.iutrodez.jeudedame.modele;
+    opens fr.iutrodez.jeudedame.modele to javafx.fxml;
+    exports fr.iutrodez.jeudedame.modele.objets;
+    opens fr.iutrodez.jeudedame.modele.objets to javafx.fxml;
 }

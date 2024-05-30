@@ -1,4 +1,4 @@
-package iut.sae.jeudedame.objets;
+package fr.iutrodez.jeudedame.modele.objets;
 
 public class Partie {
     private Joueur joueurBlanc;
