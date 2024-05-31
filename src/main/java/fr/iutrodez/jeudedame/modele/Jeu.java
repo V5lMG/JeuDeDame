@@ -25,7 +25,7 @@ public class Jeu extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1366, 768);
 
         // Configuration de la fenêtre principale
-        stage.setTitle("Jeu de Dames");
+        stage.setTitle("EasyCheckers");
         stage.setScene(scene);
         stage.show();
     }
