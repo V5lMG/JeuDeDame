@@ -1,59 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iutrodez.jeudedame.controller.Controller">
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                <Label prefHeight="145.0" prefWidth="532.0" text="Jeu de dame" textFill="#940f0f">
-                    <font>
-                        <Font name="Javanese Text" size="64.0" />
-                    </font>
-                    <padding>
-                        <Insets left="100.0" top="50.0" />
-                    </padding>
-                </Label>
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin>
-                        <Insets left="450.0" top="30.0" />
-                    </HBox.margin>
-                </ImageView>
-                <VBox prefHeight="200.0" prefWidth="100.0" />
+                <HBox prefHeight="284.0" prefWidth="377.0" stylesheets="@jeuDame.css">
+                    <children>
+                  <Label styleClass="titre-application" text="EasyCheckers" textFill="TRANSPARENT">
+                     <HBox.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="31.0" />
+                     </font>
+                  </Label>
+                    </children>
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+                </HBox>
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="990.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="76.0" prefWidth="76.0" styleClass="image-button">
+                     <children>
+                            <ImageView fx:id="boutonAmpoule" fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" styleClass="image-style">
+                                <HBox.margin>
+                                    <Insets />
+                                </HBox.margin>
+                                <image>
+                                    <Image url="@ampoule.png" />
+                                </image>
+                            </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox prefHeight="76.0" prefWidth="76.0" styleClass="image-button">
+                     <children>
+                            <ImageView fx:id="boutonEngrenage" fitHeight="56.0" fitWidth="56.0" styleClass="image-style">
+                                <image>
+                                    <Image url="@parametre.png" />
+                                </image>
+                                <HBox.margin>
+                                    <Insets />
+                                </HBox.margin>
+                            </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </HBox.margin>
+                  </HBox>
+               </children>
+            </HBox>
             </children>
         </HBox>
-        <VBox prefHeight="476.0" prefWidth="1366.0">
+        <HBox prefHeight="654.0" prefWidth="1366.0" stylesheets="@jeuDame.css">
             <children>
-                <GridPane fx:id="gameGrid" gridLinesVisible="true" prefHeight="344.0" prefWidth="411.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <VBox.margin>
-                        <Insets left="500.0" right="500.0" />
-                    </VBox.margin>
-                </GridPane>
+                <VBox prefHeight="497.0" prefWidth="244.0">
+                    <HBox.margin>
+                        <Insets left="50.0" />
+                    </HBox.margin>
+                </VBox>
+            <StackPane prefHeight="623.0" prefWidth="606.0">
+               <children>
+                      <GridPane fx:id="plateau" prefHeight="615.0" prefWidth="615.0" styleClass="game-board">
+                      </GridPane>
+                  <ImageView fitHeight="621.0" fitWidth="647.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@plateau_vert.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="30.0" right="40.0" />
+               </HBox.margin>
+            </StackPane>
+                <VBox prefHeight="650.0" prefWidth="380.0">
+                    <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="141.0" styleClass="card">
+                     <children>
+                        <Label alignment="TOP_CENTER" styleClass="card-text" text="Joueur Noir">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin></Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="5.0" />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets bottom="138.0" left="45.0" right="45.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" styleClass="card">
+                     <children>
+                        <Label styleClass="card-text" text="12 : 30 sec">
+                           <font>
+                              <Font size="23.0" />
+                           </font></Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="45.0" right="45.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="141.0" prefWidth="200.0" styleClass="card">
+                     <children>
+                        <Label alignment="TOP_CENTER" styleClass="card-text" text="Joueur Blanc">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="45.0" right="45.0" top="140.0" />
+                     </VBox.margin>
+                  </HBox>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="15.0" />
+                    </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+                </VBox>
             </children>
-        </VBox>
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </HBox>
     </children>
+   <stylesheets>
+      <URL value="@jeuDame.css" />
+      <URL value="@jeuDame.css" />
+   </stylesheets>
 </VBox>

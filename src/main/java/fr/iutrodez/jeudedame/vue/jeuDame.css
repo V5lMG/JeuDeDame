@@ -1,0 +1,68 @@
+/* jeuDame.css */
+@import url('https://fonts.googleapis.com/css2?family=Jomhuria&display=swap');
+
+
+.root {
+    -fx-green-color: #69923E;
+    -fx-dark-green-color: #4E7837;
+    -fx-grey-color: #454A51;
+    -fx-white-color: #FFFFFF;
+}
+
+.background {
+    -fx-background: -fx-grey-color;
+    -fx-background-radius: 0 0 18 18;
+
+    -fx-border-color: -fx-dark-green-color;
+    -fx-border-width: 4;
+    -fx-border-radius: 0 0 18 18;
+
+    -fx-width: 1300px;
+    -fx-height: 750px;
+}
+
+.titre-application {
+    -fx-text-fill: -fx-green-color;
+    -fx-font-family: 'Jomhuria';
+    -fx-font-size: 58px;
+    -fx-line-height: 58px;
+    -fx-font-weight: 400;
+    -fx-font-style: normal;
+
+    -fx-stroke: -fx-white-color;
+    -fx-stroke-width: 1;
+
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.25), 0, 0, 0, 4);
+}
+
+.image-button {
+    -fx-background-color: -fx-green-color;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.25), 0, 0, 0, 4);
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-border-color: -fx-white-color;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+}
+
+.image-button:hover {
+    -fx-background-color: -fx-dark-green-color;
+}
+
+.game-board {
+    -fx-background-color: -fx-white-color;
+}
+
+.card {
+    -fx-border-color: -fx-white-color;
+    -fx-background-color: -fx-green-color;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.25), 0, 0, 0, 4);
+}
+
+.card-text {
+
+}

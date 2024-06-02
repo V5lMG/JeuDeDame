@@ -11,6 +11,10 @@ import java.net.URL;
 
 public class Jeu extends Application {
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -20,7 +24,7 @@ public class Jeu extends Application {
 
 
         if (fxmlLoader.getLocation() == null) {
-            throw new IOException("Cannot load resource: jeu-dame.fxml");
+            throw new IOException("URL du fxml invalide");
         }
         Scene scene = new Scene(fxmlLoader.load(), 1366, 768);
 
@@ -28,9 +32,5 @@ public class Jeu extends Application {
         stage.setTitle("Jeu de Dames");
         stage.setScene(scene);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
