@@ -6,6 +6,6 @@ module iut.sae.jeudedame {
     opens fr.iutrodez.jeudedame.controller to javafx.fxml;
     exports fr.iutrodez.jeudedame.modele;
     opens fr.iutrodez.jeudedame.modele to javafx.fxml;
-    exports fr.iutrodez.jeudedame.modele.objets;
-    opens fr.iutrodez.jeudedame.modele.objets to javafx.fxml;
+    exports fr.iutrodez.jeudedame;
+    opens fr.iutrodez.jeudedame to javafx.fxml;
 }

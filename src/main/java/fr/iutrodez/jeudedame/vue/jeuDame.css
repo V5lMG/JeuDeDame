@@ -51,7 +51,7 @@
 }
 
 .game-board {
-    -fx-background-color: -fx-white-color;
+    -fx-background-color: transparent;
 }
 
 .card {

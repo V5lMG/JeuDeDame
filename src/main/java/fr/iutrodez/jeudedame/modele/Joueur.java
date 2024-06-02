@@ -1,34 +1,26 @@
-package fr.iutrodez.jeudedame.modele.objets;
+package fr.iutrodez.jeudedame.modele;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Joueur {
-    private String couleur;
-    private List<Pion> pionsEnJeu;
+    private List<Pion> pions;
+    private String nom;
 
-    public Joueur(String couleur) {
-        this.couleur = couleur;
-        this.pionsEnJeu = new ArrayList<>(); // Initialisation de la liste des pièces
+    public Joueur(String nom) {
+        this.nom = nom;
+        this.pions = new ArrayList<>();
     }
 
-    public String getCouleur() {
-        return couleur;
+    public void ajouterPion(Pion pion) {
+        pions.add(pion);
     }
 
-    public List<Pion> getPionsEnJeu() {
-        return pionsEnJeu;
+    public List<Pion> getPions() {
+        return pions;
     }
 
-    public void setPieces(List<Pion> pieces) {
-        this.pionsEnJeu = pieces;
-    }
-
-    public void setCouleur(String couleur) {
-        this.couleur = couleur;
-    }
-
-    public int getNombrePionsEnJeu(Joueur joueur) {
-        return pionsEnJeu.size();
+    public String getNom() {
+        return nom;
     }
 }

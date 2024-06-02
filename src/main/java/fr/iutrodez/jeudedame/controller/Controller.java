@@ -1,52 +1,55 @@
 package fr.iutrodez.jeudedame.controller;
 
+import fr.iutrodez.jeudedame.modele.Joueur;
+import fr.iutrodez.jeudedame.modele.Pion;
+import fr.iutrodez.jeudedame.modele.Plateau;
 import javafx.fxml.FXML;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.image.Image;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
-
-import java.io.File;
-import java.net.URL;
+import javafx.scene.layout.GridPane;
 
 public class Controller {
+
     @FXML
-    private GridPane plateau;
+    private GridPane gameGrid;
+
+    private Plateau plateau;
+    private Joueur joueurNoir;
+    private Joueur joueurBlanc;
 
     @FXML
     public void initialize() {
-        setupGameBoard();
-    }
+        System.out.println("Initialisation du contrôleur...");
+        if (gameGrid == null) {
+            System.out.println("Erreur: gameGrid est null");
+        } else {
+            System.out.println("gameGrid est initialisé");
+        }
 
-    private void setupGameBoard() {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                StackPane cell = new StackPane();
-                cell.setStyle("-fx-border-color: black; -fx-border-width: 1;");
-                if ((row + col) % 2 != 0) {  // Assuming black cells have pawns
-                    if (row < 3) {
-                        addPion(cell, "pion_blanc.png");
-                    } else if (row > 4) {
-                        addPion(cell, "pion_noir.png");
-                    }
+        plateau = new Plateau();
+        joueurNoir = new Joueur("Noir");
+        joueurBlanc = new Joueur("Blanc");
+        plateau.initialiser(joueurNoir, joueurBlanc);
+        for (Pion[] row : plateau.getCases()) {
+            for (Pion pion : row) {
+                if (pion != null) {
+                    placePionInView(pion, pion.getPosX(), pion.getPosY());
                 }
-                plateau.add(cell, col, row);
             }
         }
     }
 
-    private void addPion(StackPane cell, String imageName) {
-        try {
+    private void placePionInView(Pion pion, int x, int y) {
+        ImageView imageView = new ImageView(pion.getImage());
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        gameGrid.add(imageView, x, y);
 
-            File imageFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/" + imageName);
-            URL imageUrl = imageFile.toURI().toURL();
+        GridPane.setHalignment(imageView, HPos.CENTER);
+        GridPane.setValignment(imageView, VPos.CENTER);
 
-            ImageView imageView = new ImageView(new Image(String.valueOf(imageUrl)));
-            imageView.setFitHeight(50);
-            imageView.setFitWidth(50);
-            cell.getChildren().add(imageView);
-        } catch (Exception e) {
-            System.out.println("Erreur lors du chargement de l'image: " + imageName + " - " + e.getMessage());
-        }
+        System.out.println("ImageView ajoutée au GridPane en [" + x + "," + y + "]");
     }
 }
+
