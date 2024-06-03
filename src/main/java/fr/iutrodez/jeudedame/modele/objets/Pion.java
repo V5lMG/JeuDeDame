@@ -1,47 +1,71 @@
-package fr.iutrodez.jeudedame.modele.objets;
+package fr.iutrodez.jeudedame.modele;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+
+import static java.lang.System.out;
 
 public class Pion {
-    private String couleur;
-    private boolean estDame;
-    private int[] position;
-    private String etat;
+    private boolean isDame;
+    private int posX;
+    private int posY;
+    private Color color;
+    private Image image;
 
-    public Pion(String couleur, int[] position) {
-        this.couleur = couleur;
-        this.estDame = false;
-        this.position = position;
-        this.etat = "vie";
+    public Pion(boolean isDame, int posX, int posY, Color color, String imagePath) {
+        this.isDame = isDame;
+        this.posX = posX;
+        this.posY = posY;
+        this.color = color;
+        try {
+            File imageFile = new File(imagePath);
+            URL imageUrl = imageFile.toURI().toURL();
+            this.image = new Image(imageUrl.openStream());
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image : " + imagePath + "\n ERREUR : " + e.getMessage());
+
+        }
+        out.println("Création d'un pion en [" + posX + "," + posY + "] isDame: " + isDame);
     }
 
-    public String getCouleurPion() {
-        return couleur;
+    public Image getImage() {
+        return image;
     }
 
-    public boolean estDame() {
-        return estDame;
+    public boolean isDame() {
+        return isDame;
     }
 
-    public int[] getPositionPion() {
-        return position;
+    public void setDame(boolean dame) {
+        isDame = dame;
     }
 
-    public String getEtatPion() {
-        return etat;
+    public int getPosX() {
+        return posX;
     }
 
-    public void promouvoir() {
-        estDame = true;
+    public void setPosX(int posX) {
+        this.posX = posX;
     }
 
-    public void setCouleurPion(String couleur) {
-        this.couleur = couleur;
+    public int getPosY() {
+        return posY;
     }
 
-    public void setPositionPion(int[] position) {
-        this.position = position;
+    public void setPosY(int posY) {
+        this.posY = posY;
     }
 
-    public void setEtatPion(String etat) {
-        this.etat = etat;
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
