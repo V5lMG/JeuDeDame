@@ -1,4 +1,4 @@
-package fr.iutrodez.jeudedame.modele;
+package fr.iutrodez.jeudedame;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,26 +11,26 @@ import java.net.URL;
 
 public class Jeu extends Application {
 
+    public static void main(String[] args) {
+        System.out.println("Démarrage du jeu de dames...");
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
-
         File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/jeu-dame.fxml");
         URL fxmlUrl = fxmlFile.toURI().toURL();
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 
-
         if (fxmlLoader.getLocation() == null) {
-            throw new IOException("Cannot load resource: jeu-dame.fxml");
+            throw new IOException("URL du fxml invalide");
         }
         Scene scene = new Scene(fxmlLoader.load(), 1366, 768);
-
-        // Configuration de la fenêtre principale
-        stage.setTitle("EasyCheckers");
+        stage.setTitle("Jeu de Dames");
         stage.setScene(scene);
         stage.show();
-    }
 
-    public static void main(String[] args) {
-        launch();
+        // Après l'affichage, simulez une action ou log pour indiquer que le jeu commence
+        System.out.println("La partie commence !");
     }
 }
