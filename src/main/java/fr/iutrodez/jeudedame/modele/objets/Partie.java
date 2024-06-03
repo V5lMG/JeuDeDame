@@ -1,30 +1,37 @@
-package fr.iutrodez.jeudedame.modele.objets;
+package fr.iutrodez.jeudedame.modele;
 
 public class Partie {
     private Joueur joueurBlanc;
     private Joueur joueurNoir;
     private Plateau plateau;
+    private Joueur joueurActuel;
 
     public Partie() {
         this.joueurBlanc = new Joueur("Blanc");
         this.joueurNoir = new Joueur("Noir");
         this.plateau = new Plateau();
+        this.plateau.initialiser(joueurNoir, joueurBlanc); // Initialiser le plateau avec les pions des joueurs
+        this.plateau.initialiser(joueurNoir, joueurBlanc);
+        this.joueurActuel = joueurBlanc; // Le joueur blanc commence
+    }
+    
+    public Joueur getJoueurActuel() {
+        return joueurActuel;
     }
 
-    public void initialisation() {
-        plateau.setTheme("Thème personnalisé"); // TODO : Enlever le STUB pour les thèmes
-
-        initialiserPions(joueurBlanc);
-        initialiserPions(joueurNoir);
+    public void changerTour() {
+        joueurActuel = (joueurActuel == joueurBlanc) ? joueurNoir : joueurBlanc;
     }
 
-    private void initialiserPions(Joueur joueur) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = i % 2; j < 8; j += 2) {
-                Pion pion = new Pion(joueur.getCouleur(), new int[]{i, j});
-                joueur.getPionsEnJeu().add(pion);
-            }
-        }
+    public Joueur getJoueurBlanc() {
+        return joueurBlanc;
     }
 
+    public Joueur getJoueurNoir() {
+        return joueurNoir;
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
 }
