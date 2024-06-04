@@ -3,10 +3,10 @@ package fr.iutrodez.jeudedame.modele;
 import javafx.scene.paint.Color;
 
 public class Plateau {
-    private Pion[][] cases = new Pion[10][10];
+    private Pion[][] cases;
 
-    public Pion[][] getCases() {
-        return cases;
+    public Plateau() {
+        cases = new Pion[10][10];
     }
 
     public void initialiser(Joueur joueurNoir, Joueur joueurBlanc) {
@@ -19,40 +19,34 @@ public class Plateau {
         initialiserPions(joueurBlanc, 6, 9, Color.WHITE, whiteImageUrl);
     }
 
-    private void initialiserPions(Joueur joueur, int startRow, int endRow, Color color, String imagePath) {
-        for (int y = startRow; y <= endRow; y++) {
-            for (int x = (y % 2 == 0 ? 1 : 0); x < 10; x += 2) {
-                Pion pion = new Pion(false, x, y, color, imagePath);
-                joueur.ajouterPion(pion);
-                placerPion(pion, x, y);
+    private void initialiserPions(Joueur joueur, int ligneDebut, int ligneFin, Color color, String imageUrl) {
+        for (int y = ligneDebut; y <= ligneFin; y++) {
+            for (int x = 0; x < cases[y].length; x++) {
+                if ((x + y) % 2 != 0) { // Les pions sont placés sur les cases noires uniquement
+                    Pion pion = new Pion(false, x, y, color, imageUrl);
+                    cases[y][x] = pion;
+                    joueur.ajouterPion(pion);
+                }
             }
         }
     }
 
-    public void placerPion(Pion pion, int x, int y) {
-        if (x >= 0 && x < 10 && y >= 0 && y < 10) {
-            cases[y][x] = pion;
-            System.out.println("Pion placé en [" + x + "," + y + "] avec couleur " + pion.getColor());
-        } else {
-            System.out.println("Tentative de placement d'un pion hors limites en [" + x + "," + y + "]");
-        }
+    public Pion getPion(int x, int y) {
+        return cases[y][x];
     }
 
-    public Pion getPion(int x, int y) {
-        if (x >= 0 && x < 10 && y >= 0 && y < 10) {
-            return cases[y][x];
-        }
-        return null;
-    }
     public boolean deplacerPion(int xSource, int ySource, int xDest, int yDest) {
         Pion pion = getPion(xSource, ySource);
         if (pion != null && estDeplacementValide(pion, xDest, yDest)) {
-            placerPion(pion, xDest, yDest);
-            cases[ySource][xSource] = null;
+            retirerPion(pion); // Retirer le pion de sa position actuelle
+            pion.setPosX(xDest);
+            pion.setPosY(yDest);
+            placerPion(pion, xDest, yDest); // Placer le pion à la nouvelle position
             return true;
         }
         return false;
     }
+
     private boolean estDeplacementValide(Pion pion, int xDest, int yDest) {
         // Vérifiez que le déplacement est dans les limites du plateau
         if (xDest < 0 || xDest >= 10 || yDest < 0 || yDest >= 10) {
@@ -80,32 +74,26 @@ public class Plateau {
                 int yMid = pion.getPosY() + dy / 2;
                 Pion pionIntermediaire = getPion(xMid, yMid);
                 if (pionIntermediaire != null && pionIntermediaire.getColor() != pion.getColor()) {
+                    retirerPion(pionIntermediaire); // Retirer le pion capturé
                     return true;
                 }
             }
         } else {
-            // Règles de déplacement pour une dame (déplacement en diagonale multiple)
-            if (Math.abs(dx) == Math.abs(dy)) {
-                int stepX = dx / Math.abs(dx);
-                int stepY = dy / Math.abs(dy);
-
-                for (int i = 1; i < Math.abs(dx); i++) {
-                    if (getPion(pion.getPosX() + i * stepX, pion.getPosY() + i * stepY) != null) {
-                        return false;
-                    }
-                }
-                return true;
-            }
+            // Règles de déplacement pour une dame (à compléter)
         }
+
         return false;
     }
-    private void retirerPion(Pion pion, Joueur joueurNoir, Joueur joueurBlanc) {
+
+    private void retirerPion(Pion pion) {
         cases[pion.getPosY()][pion.getPosX()] = null;
-        if (pion.getColor() == Color.BLACK) {
-            joueurNoir.getPions().remove(pion);
-        } else {
-            joueurBlanc.getPions().remove(pion);
-        }
-        System.out.println("Pion retiré en [" + pion.getPosX() + "," + pion.getPosY() + "]");
+    }
+
+    private void placerPion(Pion pion, int x, int y) {
+        cases[y][x] = pion;
+    }
+
+    public Pion[][] getCases() {
+        return cases;
     }
 }
