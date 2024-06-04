@@ -11,7 +11,6 @@ public class Partie {
         this.joueurNoir = new Joueur("Noir");
         this.plateau = new Plateau();
         this.plateau.initialiser(joueurNoir, joueurBlanc); // Initialiser le plateau avec les pions des joueurs
-        this.plateau.initialiser(joueurNoir, joueurBlanc);
         this.joueurActuel = joueurBlanc; // Le joueur blanc commence
     }
     
