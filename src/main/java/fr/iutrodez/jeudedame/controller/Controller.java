@@ -1,6 +1,7 @@
 package fr.iutrodez.jeudedame.controller;
 
 import fr.iutrodez.jeudedame.modele.Joueur;
+import fr.iutrodez.jeudedame.modele.Partie;
 import fr.iutrodez.jeudedame.modele.Pion;
 import fr.iutrodez.jeudedame.modele.Plateau;
 import javafx.fxml.FXML;
@@ -11,22 +12,22 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 public class Controller {
-	
+
     @FXML
     private GridPane gameGrid;
-    
-    // Déclaration de la variable partie
+
     private Partie partie;
     private Plateau plateau;
     private Joueur joueurNoir;
     private Joueur joueurBlanc;
     private Pion pionSelectionne;
+    private ImageView imageViewSelectionnee;
     private int xSource, ySource;
-    
+
     public void initialize(Partie partie) {
         this.partie = partie;
     }
-    
+
     @FXML
     public void initialize() {
         System.out.println("Initialisation du contrôleur...");
@@ -76,25 +77,31 @@ public class Controller {
             pionSelectionne = plateau.getPion(x, y);
             xSource = x;
             ySource = y;
+            imageViewSelectionnee = imageView; // Stocker la référence de l'ImageView sélectionnée
             System.out.println("Pion sélectionné en [" + x + "," + y + "]");
-            imageView.setStyle("-fx-effect: dropshadow(gaussian, yellow, 10, 0, 0, 0);"); // Ajouter une surbrillance
+            imageView.setStyle("-fx-effect: dropshadow(gaussian, blue, 10, 0, 0, 0);"); // Ajouter une surbrillance
         } else {
             if (plateau.deplacerPion(xSource, ySource, x, y)) {
                 System.out.println("Pion déplacé de [" + xSource + "," + ySource + "] à [" + x + "," + y + "]");
                 pionSelectionne = null;
+                imageViewSelectionnee.setStyle(""); // Supprimer la surbrillance de l'ancien pion
+                imageViewSelectionnee = null;
                 afficherPlateau();
                 partie.changerTour(); // Changer de tour après un mouvement valide
                 verifierConditionVictoire(); // Vérifier la condition de victoire
             } else {
                 System.out.println("Déplacement invalide");
+                imageViewSelectionnee.setStyle(""); // Supprimer la surbrillance de l'ancien pion
                 pionSelectionne = null;
+                imageViewSelectionnee = null;
             }
         }
     }
+
     private void verifierConditionVictoire() {
-        if (joueurBlanc.getPions().isEmpty()) {
+        if (partie.getJoueurBlanc().getPions().isEmpty()) {
             System.out.println("Le joueur Noir a gagné !");
-        } else if (joueurNoir.getPions().isEmpty()) {
+        } else if (partie.getJoueurNoir().getPions().isEmpty()) {
             System.out.println("Le joueur Blanc a gagné !");
         }
     }
