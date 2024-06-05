@@ -31,11 +31,10 @@ public class Jeu extends Application {
         stage.setTitle("Jeu de Dames");
         stage.show();
 
-        Controller controller = fxmlLoader.getController();
+        Controleur controller = fxmlLoader.getController();
         controller.setPartie(partie);
         controller.initialize();
 
-        // Après l'affichage, simulez une action ou log pour indiquer que le jeu commence
         System.out.println("La partie commence !");
     }
 }

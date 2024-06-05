@@ -1,5 +1,7 @@
 package fr.iutrodez.jeudedame;
 
+import static java.lang.System.out;
+
 public class Partie {
     private Joueur joueurNoir;
     private Joueur joueurBlanc;
@@ -8,19 +10,19 @@ public class Partie {
     private Plateau plateau;
 
     public Partie() {
-        System.out.println("Démarrage d'une nouvelle partie...");
+        out.println("Démarrage d'une nouvelle partie...");
         joueurNoir = new Joueur("NOIR");
         joueurBlanc = new Joueur("BLANC");
         joueurActuel = joueurNoir;
         plateau = new Plateau();
         plateau.initialiser(joueurNoir, joueurBlanc); // Noir commence
-        System.out.println("Nouvelle partie démarrée.");
+        out.println("Nouvelle partie démarrée.");
     }
 
     public void changerJoueur() {
-        System.out.println("Changement de joueur...");
+        out.println("Changement de joueur...");
         joueurActuel = (joueurActuel == joueurNoir) ? joueurBlanc : joueurNoir;
-        System.out.println("C'est maintenant au tour du joueur " + joueurActuel.getColor() + ".");
+        out.println("C'est maintenant au tour du joueur " + joueurActuel.getColor() + ".");
     }
 
     public Joueur getJoueurBlanc() {
@@ -28,7 +30,7 @@ public class Partie {
     }
 
     public Pion getPionAt(int x, int y) {
-        System.out.println("Obtention du pion à (" + x + ", " + y + ") depuis le plateau...");
+        out.println("Obtention du pion à (" + x + ", " + y + ") depuis le plateau...");
         return plateau.getPion(x, y);
     }
 
@@ -44,28 +46,30 @@ public class Partie {
         return plateau;
     }
 
-    public boolean selectionnerPion(int x, int y) {
-        System.out.println("Sélection du pion à (" + x + ", " + y + ")...");
+    public void selectionnerPion(int x, int y) {
+        out.println("Sélection du pion à (" + x + ", " + y + ")...");
         Pion pion = joueurActuel.getPionAt(x, y);
         if (pion != null) {
             pionSelectionne = pion;
-            System.out.println("Pion sélectionné.");
-            return true;
+            out.println("Pion sélectionné.");
+            return;
         }
-        System.out.println("Aucun pion à sélectionner.");
-        return false;
+        out.println("Aucun pion à sélectionner.");
     }
 
     public boolean deplacerPion(int newX, int newY) {
-        System.out.println("Déplacement du pion vers (" + newX + ", " + newY + ")...");
-        if (pionSelectionne != null && plateau.estDeplacementValide(pionSelectionne, newX, newY)) {
+        out.println("Déplacement du pion vers (" + newX + ", " + newY + ")...");
+        if (pionSelectionne == null) {
+            out.println("Erreur : Aucun pion n'a été sélectionné.");
+            return false;  // Empêche le déplacement si aucun pion n'est sélectionné
+        }
+        if (plateau.estDeplacementValide(pionSelectionne, newX, newY)) {
             plateau.deplacerPion(pionSelectionne, newX, newY);
+            out.println("Pion déplacé avec succès.");
             pionSelectionne = null;
-            changerJoueur();
-            System.out.println("Pion déplacé avec succès.");
             return true;
         }
-        System.out.println("Déplacement invalide.");
+        out.println("Déplacement invalide : Partie.java");
         return false;
     }
 }

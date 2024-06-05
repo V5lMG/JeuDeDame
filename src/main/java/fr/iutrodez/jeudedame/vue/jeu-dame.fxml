@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="background" prefHeight="768.0" prefWidth="1366.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iutrodez.jeudedame.Controller">
+<VBox fx:id="background" prefHeight="768.0" prefWidth="1366.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iutrodez.jeudedame.Controleur">
     <children>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -92,7 +92,7 @@
                         <Image url="@plateau_vert.png" />
                      </image>
                   </ImageView>
-                      <GridPane fx:id="gameGrid" onMouseClicked="#onGridClicked" prefHeight="615.0" prefWidth="615.0" styleClass="game-board">
+                      <GridPane fx:id="gameGrid" onMouseClicked="#onCaseClicked" prefHeight="615.0" prefWidth="615.0" styleClass="game-board">
                           <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
