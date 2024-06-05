@@ -1,4 +1,4 @@
-package fr.iutrodez.jeudedame;
+package fr.iutrodez.jeudedame.modele;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import static java.lang.System.out;
 
 public class Joueur {
-    private List<Pion> pions;  // Liste des pions contrôlés par le joueur
-    private String color; // Couleur du joueur
+    private List<Pion> pions;
+    private String color;
 
     public Joueur(String color) {
         out.println("Création du joueur avec la couleur : " + color);

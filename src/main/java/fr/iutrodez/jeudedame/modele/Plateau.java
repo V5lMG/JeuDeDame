@@ -1,4 +1,8 @@
-package fr.iutrodez.jeudedame;
+package fr.iutrodez.jeudedame.modele;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static java.lang.System.out;
 
@@ -58,7 +62,7 @@ public class Plateau {
         return null;
     }
 
-    private boolean isWithinBounds(int x, int y) {
+    public boolean isWithinBounds(int x, int y) {
         return x >= 0 && x < 10 && y >= 0 && y < 10;
     }
 
@@ -106,21 +110,22 @@ public class Plateau {
         return midPion != null && !midPion.getColor().equals(pion.getColor());
     }
 
+    public void supprimerPion(Pion pion) {
+        cases[pion.getPosY()][pion.getPosX()].setPion(null);
+        out.println("Pion supprimé du modèle");
+    }
+
     public void deplacerPion(Pion pion, int newX, int newY) {
         if (!estDeplacementValide(pion, newX, newY)) {
             out.println("Déplacement invalide.");
             return;
         }
 
-        // Remove the pion from its current location
         cases[pion.getPosY()][pion.getPosX()].setPion(null);
-
-        // Place the pion at the new location
         pion.setPosX(newX);
         pion.setPosY(newY);
         cases[newY][newX].setPion(pion);
 
-        // Check for captures
         if (Math.abs(newX - pion.getPosX()) == 2) {
             int midX = (pion.getPosX() + newX) / 2;
             int midY = (pion.getPosY() + newY) / 2;
@@ -141,5 +146,44 @@ public class Plateau {
         if ((pion.getColor().equals("NOIR") && pion.getPosY() == 9) || (pion.getColor().equals("BLANC") && pion.getPosY() == 0)) {
             pion.promouvoir();
         }
+    }
+
+    public List<int[]> getLegalMoves(Pion pion) {
+        List<int[]> moves = new ArrayList<>();
+        List<int[]> captureMoves = new ArrayList<>();
+        int x = pion.getPosX();
+        int y = pion.getPosY();
+
+        int[][] directions = pion.isDame()
+                ? new int[][]{{-1, -1}, {1, -1}, {-1, 1}, {1, 1}}
+                : pion.getColor().equals("NOIR")
+                ? new int[][]{{-1, -1}, {1, -1}}
+                : new int[][]{{-1, 1}, {1, 1}};
+
+        for (int[] dir : directions) {
+            int newX = x + dir[0];
+            int newY = y + dir[1];
+            int jumpX = x + 2 * dir[0];
+            int jumpY = y + 2 * dir[1];
+
+            if (isWithinBounds(newX, newY) && !cases[newY][newX].estOccupee()) {
+                moves.add(new int[]{newX, newY});
+            }
+
+            if (isWithinBounds(jumpX, jumpY) && isWithinBounds(newX, newY) &&
+                    cases[newY][newX].estOccupee() && !cases[jumpY][jumpX].estOccupee() &&
+                    !Objects.equals(cases[newY][newX].getPion().getColor(), pion.getColor())) {
+                captureMoves.add(new int[]{jumpX, jumpY});
+            }
+        }
+
+        return captureMoves.isEmpty() ? moves : captureMoves;
+    }
+
+    public Case getCase(int x, int y) {
+        if (x < 0 || x >= cases.length || y < 0 || y >= cases[x].length) {
+            return null;
+        }
+        return cases[y][x];
     }
 }

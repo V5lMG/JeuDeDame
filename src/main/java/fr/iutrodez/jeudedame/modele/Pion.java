@@ -1,4 +1,4 @@
-package fr.iutrodez.jeudedame;
+package fr.iutrodez.jeudedame.modele;
 
 import javafx.scene.image.Image;
 

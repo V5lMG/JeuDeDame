@@ -1,4 +1,7 @@
-package fr.iutrodez.jeudedame;
+package fr.iutrodez.jeudedame.modele;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.out;
 
@@ -17,6 +20,10 @@ public class Partie {
         plateau = new Plateau();
         plateau.initialiser(joueurNoir, joueurBlanc); // Noir commence
         out.println("Nouvelle partie démarrée.");
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
     }
 
     public void changerJoueur() {
@@ -75,15 +82,6 @@ public class Partie {
         return false;
     }
 
-    public boolean hasCaptureMove(Joueur joueur) {
-        for (Pion pion : joueur.getPions()) {
-            if (canCapture(pion)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean canCapture(Pion pion) {
         int x = pion.getPosX();
         int y = pion.getPosY();
@@ -116,5 +114,18 @@ public class Partie {
         int midX = (startX + endX) / 2;
         int midY = (startY + endY) / 2;
         return getPionAt(midX, midY);
+    }
+
+    public Pion[] getAllPions(String color) {
+        List<Pion> pions = new ArrayList<>();
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                Pion pion = plateau.getPion(x, y);
+                if (pion != null && pion.getColor().equals(color)) {
+                    pions.add(pion);
+                }
+            }
+        }
+        return pions.toArray(new Pion[0]); // Return as an array of Pions
     }
 }

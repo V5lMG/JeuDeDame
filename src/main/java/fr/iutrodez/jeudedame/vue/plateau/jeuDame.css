@@ -8,6 +8,7 @@
     -fx-grey-color: #454A51;
     -fx-white-color: #FFFFFF;
     -fx-blue-color: #1774d3;
+    -fx-red-color: #aa2017;
 }
 
 .background {
@@ -70,4 +71,12 @@
 
 .highlighted-pion {
     -fx-effect: dropshadow(gaussian, -fx-blue-color, 10, 0.8, 0, 5);
+}
+
+.highlight-move {
+    -fx-background-color: -fx-red-color;
+}
+
+.highlight-capture {
+    -fx-effect: dropshadow(gaussian, -fx-red-color, 10, 0.8, 0, 5);
 }

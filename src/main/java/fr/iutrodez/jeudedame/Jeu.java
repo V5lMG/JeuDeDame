@@ -1,5 +1,7 @@
 package fr.iutrodez.jeudedame;
 
+import fr.iutrodez.jeudedame.controleur.Controleur;
+import fr.iutrodez.jeudedame.modele.Partie;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,6 +16,7 @@ public class Jeu extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
     @Override
     public void start(Stage stage) throws IOException {
         Partie partie = new Partie();
