@@ -64,11 +64,17 @@ public class Controleur {
             Integer y = GridPane.getRowIndex(source);
 
             if (x == null || y == null) {
-                out.println("Click en dehors des indices valides de la grille.");
                 return;
             }
 
             out.println("Case cliquée à (" + x + ", " + y + ").");
+
+            // Vérifier si le joueur actuel doit capturer
+            if (partie.hasCaptureMove(partie.getJoueurActuel())) {
+                out.println("Vous devez capturer avec un pion.");
+                highlightPionsForCapture();
+                return;
+            }
 
             Pion pionSurCase = partie.getPionAt(x, y);
             if (pionSurCase != null) {
@@ -85,7 +91,19 @@ public class Controleur {
         }
     }
 
-
+    private void highlightPionsForCapture() {
+        for (Pion pion : partie.getJoueurActuel().getPions()) {
+            if (partie.canCapture(pion) && pion != selectedPion) {
+                int x = pion.getPosX();
+                int y = pion.getPosY();
+                for (Node node : gameGrid.getChildren()) {
+                    if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node instanceof ImageView) {
+                        highlightPion((ImageView) node);
+                    }
+                }
+            }
+        }
+    }
 
     private void onPionClicked(MouseEvent event) {
         ImageView clickedImageView = (ImageView) event.getSource();
@@ -95,12 +113,15 @@ public class Controleur {
 
         Pion clickedPion = partie.getPionAt(x, y);
         if (clickedPion != null && clickedPion.getColor().equals(partie.getJoueurActuel().getColor())) {
-            out.println("Sélection du pion...");
+            if (partie.hasCaptureMove(partie.getJoueurActuel()) && !partie.canCapture(clickedPion)) {
+                out.println("Le pion sélectionné ne peut pas capturer.");
+                highlightPionsForCapture();
+                return; // Ne rien faire si le pion ne peut pas capturer
+            }
             if (selectedPionImageView != null) {
                 deselectPion();
             }
             selectPion(clickedImageView, clickedPion);
-            out.println("Pion sélectionné.");
         }
     }
 
@@ -110,7 +131,7 @@ public class Controleur {
         selectedPionImageView = imageView;
         partie.selectionnerPion(pion.getPosX(), pion.getPosY());
         highlightPion(imageView);
-        out.println("Pion sélectionné.");
+        //out.println("Pion sélectionné.");
     }
 
     private void attemptMove(int newX, int newY) {

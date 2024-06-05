@@ -42,10 +42,6 @@ public class Partie {
         return joueurActuel;
     }
 
-    public Plateau getPlateau() {
-        return plateau;
-    }
-
     public void selectionnerPion(int x, int y) {
         out.println("Sélection du pion à (" + x + ", " + y + ")...");
         Pion pion = joueurActuel.getPionAt(x, y);
@@ -61,7 +57,7 @@ public class Partie {
         out.println("Déplacement du pion vers (" + newX + ", " + newY + ")...");
         if (pionSelectionne == null) {
             out.println("Erreur : Aucun pion n'a été sélectionné.");
-            return false;  // Empêche le déplacement si aucun pion n'est sélectionné
+            return false;
         }
         if (plateau.estDeplacementValide(pionSelectionne, newX, newY)) {
             plateau.deplacerPion(pionSelectionne, newX, newY);
@@ -71,5 +67,18 @@ public class Partie {
         }
         out.println("Déplacement invalide : Partie.java");
         return false;
+    }
+
+    public boolean hasCaptureMove(Joueur joueur) {
+        for (Pion pion : joueur.getPions()) {
+            if (plateau.peutCapturer(pion)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canCapture(Pion pion) {
+        return plateau.peutCapturer(pion);
     }
 }

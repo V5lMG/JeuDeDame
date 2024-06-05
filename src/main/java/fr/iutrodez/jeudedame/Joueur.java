@@ -7,7 +7,6 @@ public class Joueur {
     private List<Pion> pions;  // Liste des pions contrôlés par le joueur
     private String color;  // Couleur du joueur
 
-    // Constructeur initialise la couleur du joueur et la liste des pions
     public Joueur(String color) {
         System.out.println("Création du joueur avec la couleur : " + color);
         this.color = color;
@@ -46,16 +45,7 @@ public class Joueur {
         return null; // Retourne null si aucun pion n'est trouvé aux coordonnées données
     }
 
-    // Obtient la couleur du joueur
     public String getColor() {
         return color;
-    }
-
-    // Méthode pour vérifier si un pion spécifique appartient au joueur
-    public boolean estProprietaireDuPion(Pion pion) {
-        System.out.println("Vérification si le joueur possède le pion...");
-        boolean result = pions.contains(pion);
-        System.out.println("Résultat de la vérification de propriété : " + result);
-        return result;
     }
 }
