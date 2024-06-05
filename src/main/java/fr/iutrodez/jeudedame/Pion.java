@@ -46,7 +46,6 @@ public class Pion {
     public void setDame(boolean dame) {
         System.out.println("Définir le statut de dame du pion à " + dame + "...");
         isDame = dame;
-        System.out.println("Statut de dame du pion défini.");
     }
 
     public int getPosX() {
@@ -56,7 +55,6 @@ public class Pion {
     public void setPosX(int posX) {
         System.out.println("Définir la position X du pion à " + posX + "...");
         this.posX = posX;
-        System.out.println("Position X du pion définie.");
     }
 
     public int getPosY() {
@@ -66,7 +64,6 @@ public class Pion {
     public void setPosY(int posY) {
         System.out.println("Définir la position Y du pion à " + posY + "...");
         this.posY = posY;
-        System.out.println("Position Y du pion définie.");
     }
 
     public String getColor() {
@@ -75,10 +72,11 @@ public class Pion {
 
     // Méthode pour promouvoir le pion en dame
     public void promouvoir() {
-        System.out.println("Promotion du pion en dame...");
         if (!isDame) {
-            setDame(true);
-            System.out.println("Pion promu en dame en position [" + posX + "," + posY + "]");
+            if ((color.equals("NOIR") && posY == 9) || (color.equals("BLANC") && posY == 0)) {
+                setDame(true);
+                System.out.println("Pion promu en dame en position [" + posX + "," + posY + "]");
+            }
         }
     }
 }

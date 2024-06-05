@@ -7,23 +7,25 @@ public class Plateau {
     private Joueur joueurNoir;
     private Joueur joueurBlanc;
 
-    public void initialiser(Joueur joueurNoir, Joueur joueurBlanc) {
-        out.println("Initialisation du plateau...");
-
+    public Plateau() {
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
                 cases[y][x] = new Case(x, y);
             }
         }
+    }
+
+    public void initialiser(Joueur joueurNoir, Joueur joueurBlanc) {
+        out.println("Initialisation du plateau...");
+        this.joueurNoir = joueurNoir;
+        this.joueurBlanc = joueurBlanc;
 
         String blackImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/image/pion_noir.png";
         String whiteImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/image/pion_blanc.png";
 
-        initialiserPions(joueurNoir, 0, 3, "NOIR", blackImageUrl);
-        initialiserPions(joueurBlanc, 6, 9, "BLANC", whiteImageUrl);
 
-        this.joueurNoir = joueurNoir;
-        this.joueurBlanc = joueurBlanc;
+        initialiserPions(joueurBlanc, 0, 3, "BLANC", whiteImageUrl);
+        initialiserPions(joueurNoir, 6, 9, "NOIR", blackImageUrl);
 
         out.println("Plateau initialisé.");
     }
@@ -41,122 +43,102 @@ public class Plateau {
     }
 
     public void placerPion(Pion pion, int x, int y) {
-        out.println("Placement du pion à (" + x + ", " + y + ")...");
-        if (x >= 0 && x < 10 && y >= 0 && y < 10) {
+        if (isWithinBounds(x, y)) {
             cases[y][x].setPion(pion);
-            out.println("Pion placé à (" + x + ", " + y + ") avec la couleur " + pion.getColor());
+            out.println("Pion placé à (" + x + ", " + y + ")");
         } else {
-            out.println("Tentative de placement du pion hors limites à (" + x + ", " + y + ").");
+            out.println("Tentative de placement du pion hors limites à (" + x + ", " + y + ")");
         }
     }
 
     public Pion getPion(int x, int y) {
-        out.println("Obtention du pion à (" + x + ", " + y + ")...");
-        if (x >= 0 && x < 10 && y >= 0 && y < 10) {
+        if (isWithinBounds(x, y)) {
             return cases[y][x].getPion();
         }
-        out.println("Aucun pion à (" + x + ", " + y + ").");
         return null;
     }
 
-    public boolean estDeplacementValide(Pion pion, int newX, int newY) {
-        int oldX = pion.getPosX();
-        int oldY = pion.getPosY();
-        int dx = newX - oldX;
-        int dy = newY - oldY;
+    private boolean isWithinBounds(int x, int y) {
+        return x >= 0 && x < 10 && y >= 0 && y < 10;
+    }
 
-        if (newX < 0 || newX >= 10 || newY < 0 || newY >= 10) {
-            out.println("Déplacement hors du plateau.");
+    public boolean estDeplacementValide(Pion pion, int newX, int newY) {
+        if (!isWithinBounds(newX, newY) || cases[newY][newX].estOccupee()) {
             return false;
         }
 
-        if (cases[newY][newX].estOccupee()) {
-            out.println("La case de destination n'est pas libre.");
-            return false;
+        int dx = Math.abs(newX - pion.getPosX());
+        int dy = Math.abs(newY - pion.getPosY());
+
+        if (!pion.isDame()) {
+            if ((pion.getColor().equals("NOIR") && newY > pion.getPosY()) ||
+                    (pion.getColor().equals("BLANC") && newY < pion.getPosY())) {
+                out.println("Déplacement invalide : les pions ne peuvent pas reculer.");
+                return false;
+            }
         }
 
         if (pion.isDame()) {
-            if (Math.abs(dx) == Math.abs(dy) && cheminLibre(oldX, oldY, dx, dy)) {
-                return true;
-            }
+            return dx == dy && cheminLibre(pion.getPosX(), pion.getPosY(), newX, newY);
         } else {
-            if (Math.abs(dx) == 2 && Math.abs(dy) == 2) {
-                // Capture possible
-                if (caseIntermediaireContientAdversaire(oldX, oldY, dx, dy, pion.getColor())) {
-                    return true;
-                }
-            }
-
-            // Déplacement normal
-            if (Math.abs(dx) == 1 && Math.abs(dy) == 1 && ((pion.getColor().equals("NOIR") && dy == 1) || (pion.getColor().equals("BLANC") && dy == -1))) {
-                return true;
-            }
+            return (dx == 1 && dy == 1) || (dx == 2 && dy == 2 && caseIntermediaireContientAdversaire(pion, newX, newY));
         }
-
-        out.println("Déplacement non valide selon les règles.");
-        return false;
     }
 
-    private boolean cheminLibre(int oldX, int oldY, int dx, int dy) {
-        int stepX = Integer.signum(dx);
-        int stepY = Integer.signum(dy);
-        int steps = Math.abs(dx);
-        for (int i = 1; i < steps; i++) {
-            if (cases[oldY + i * stepY][oldX + i * stepX].estOccupee()) {
+    private boolean cheminLibre(int startX, int startY, int endX, int endY) {
+        int dx = Integer.signum(endX - startX);
+        int dy = Integer.signum(endY - startY);
+        int distance = Math.abs(endX - startX);
+        for (int step = 1; step < distance; step++) {
+            int x = startX + step * dx;
+            int y = startY + step * dy;
+            if (cases[y][x].estOccupee()) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean caseIntermediaireContientAdversaire(int oldX, int oldY, int dx, int dy, String pionColor) {
-        int midX = oldX + dx / 2;
-        int midY = oldY + dy / 2;
-
+    private boolean caseIntermediaireContientAdversaire(Pion pion, int newX, int newY) {
+        int midX = (pion.getPosX() + newX) / 2;
+        int midY = (pion.getPosY() + newY) / 2;
         Pion midPion = getPion(midX, midY);
-        if (midPion != null && !midPion.getColor().equals(pionColor)) {
-            out.println("Pion adversaire trouvé à (" + midX + ", " + midY + ") : " + midPion);
-            return true;
-        }
-
-        out.println("Aucun pion adversaire à (" + midX + ", " + midY + ")");
-        return false;
+        return midPion != null && !midPion.getColor().equals(pion.getColor());
     }
 
     public void deplacerPion(Pion pion, int newX, int newY) {
         if (!estDeplacementValide(pion, newX, newY)) {
-            out.println("Déplacement invalide vers (" + newX + ", " + newY + ").");
+            out.println("Déplacement invalide.");
             return;
         }
 
-        int oldX = pion.getPosX();
-        int oldY = pion.getPosY();
+        // Remove the pion from its current location
+        cases[pion.getPosY()][pion.getPosX()].setPion(null);
 
-        cases[oldY][oldX].setPion(null);
-
-        if (Math.abs(newX - oldX) == 2 && Math.abs(newY - oldY) == 2) {
-            // Calculer la position intermédiaire
-            int midX = (newX + oldX) / 2;
-            int midY = (newY + oldY) / 2;
-            Pion capturedPion = cases[midY][midX].getPion();
-            if (capturedPion != null && !capturedPion.getColor().equals(pion.getColor())) {
-                cases[midY][midX].setPion(null);
-                Joueur adversaire = pion.getColor().equals("NOIR") ? joueurBlanc : joueurNoir;
-                adversaire.retirerPion(capturedPion);
-                out.println("Pion capturé à (" + midX + ", " + midY + ").");
-            }
-        }
-
+        // Place the pion at the new location
         pion.setPosX(newX);
         pion.setPosY(newY);
         cases[newY][newX].setPion(pion);
+
+        // Check for captures
+        if (Math.abs(newX - pion.getPosX()) == 2) {
+            int midX = (pion.getPosX() + newX) / 2;
+            int midY = (pion.getPosY() + newY) / 2;
+            Pion capturedPion = getPion(midX, midY);
+            if (capturedPion != null) {
+                cases[midY][midX].setPion(null);
+                Joueur opponent = capturedPion.getColor().equals("NOIR") ? joueurBlanc : joueurNoir;
+                opponent.retirerPion(capturedPion);
+                out.println("Pion capturé à (" + midX + ", " + midY + ")");
+            }
+        }
+
         verifierPromotion(pion);
-        out.println("Pion déplacé de (" + oldX + ", " + oldY + ") à (" + newX + ", " + newY + ").");
+        out.println("Pion déplacé de (" + pion.getPosX() + ", " + pion.getPosY() + ") à (" + newX + ", " + newY + ")");
     }
 
     public void verifierPromotion(Pion pion) {
-        if ((pion.getColor().equals("NOIR") && pion.getPosY() == 9) ||
-                (pion.getColor().equals("BLANC") && pion.getPosY() == 0)) {
+        if ((pion.getColor().equals("NOIR") && pion.getPosY() == 9) || (pion.getColor().equals("BLANC") && pion.getPosY() == 0)) {
             pion.promouvoir();
         }
     }

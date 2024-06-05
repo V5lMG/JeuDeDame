@@ -32,7 +32,7 @@ public class Jeu extends Application {
 
         Controleur controller = fxmlLoader.getController();
         controller.setPartie(partie);
-        controller.Controleur();
+        controller.initialize();
 
         System.out.println("La partie commence !");
     }

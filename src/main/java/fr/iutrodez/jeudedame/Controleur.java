@@ -1,6 +1,8 @@
 package fr.iutrodez.jeudedame;
 
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -16,11 +18,10 @@ public class Controleur {
     private Pion selectedPion;
 
     @FXML
-    public void Controleur() {
+    public void initialize() {
         out.println("Initialisation du contrôleur...");
         partie = new Partie();
         drawInitialBoard();
-        out.println("Contrôleur initialisé.");
     }
 
     private void drawInitialBoard() {
@@ -54,6 +55,8 @@ public class Controleur {
         imageView.setSmooth(true);
         imageView.setOnMouseClicked(this::onPionClicked);
         GridPane.setConstraints(imageView, x, y);
+        GridPane.setHalignment(imageView, HPos.CENTER);
+        GridPane.setValignment(imageView, VPos.CENTER);
         gameGrid.add(imageView, x, y);
     }
 
@@ -153,6 +156,7 @@ public class Controleur {
                 }
             }
 
+            removeHighlightFromAllPions();
             deselectPion();
             partie.changerJoueur();
             out.println("Pion déplacé avec succès.");
@@ -162,24 +166,12 @@ public class Controleur {
     }
 
     public void removePionFromView(Pion capturedPion) {
-        Node nodeToRemove = null;
-        out.println("Tentative de suppression du pion en vue à (" + capturedPion.getPosX() + ", " + capturedPion.getPosY() + ")...");
         for (Node node : gameGrid.getChildren()) {
-            if (node instanceof ImageView) {
-                Integer xPane = GridPane.getColumnIndex(node);
-                Integer yPane = GridPane.getRowIndex(node);
-                out.println("Vérification du Node à (" + xPane + ", " + yPane + ")...");
-                if (xPane != null && yPane != null && xPane == capturedPion.getPosX() && yPane == capturedPion.getPosY()) {
-                    nodeToRemove = node;
-                    break;
-                }
+            if (node instanceof ImageView && GridPane.getColumnIndex(node) == capturedPion.getPosX() && GridPane.getRowIndex(node) == capturedPion.getPosY()) {
+                gameGrid.getChildren().remove(node);
+                out.println("Pion ImageView retiré du GUI à (" + capturedPion.getPosX() + ", " + capturedPion.getPosY() + ")");
+                break;
             }
-        }
-        if (nodeToRemove != null) {
-            gameGrid.getChildren().remove(nodeToRemove);
-            out.println("Pion retiré de la vue.");
-        } else {
-            out.println("Pas de Node à supprimer pour les coordonnées (" + capturedPion.getPosX() + ", " + capturedPion.getPosY() + ").");
         }
     }
 
@@ -211,5 +203,13 @@ public class Controleur {
         this.partie = partie;
         drawInitialBoard();
         out.println("Nouvelle partie définie.");
+    }
+
+    private void removeHighlightFromAllPions() {
+        for (Node node : gameGrid.getChildren()) {
+            if (node instanceof ImageView) {
+                node.getStyleClass().remove("highlighted-pion");
+            }
+        }
     }
 }

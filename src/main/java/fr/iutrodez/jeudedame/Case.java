@@ -11,14 +11,6 @@ public class Case {
         this.pion = null;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
     public Pion getPion() {
         return pion;
     }

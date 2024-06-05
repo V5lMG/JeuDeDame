@@ -13,40 +13,25 @@ public class Joueur {
         out.println("Création du joueur avec la couleur : " + color);
         this.color = color;
         this.pions = new ArrayList<>();
-        out.println("Joueur créé.");
     }
 
-    // Ajoute un pion à la collection de pions du joueur
     public void ajouterPion(Pion pion) {
-        out.println("Ajout d'un pion au joueur...");
         pions.add(pion);
-        out.println("Pion ajouté.");
     }
 
     public void retirerPion(Pion pion) {
-        out.println("Suppression d'un pion du joueur...");
-        pions.remove(pion);
-        out.println("Pion supprimé.");
+        if (pions.remove(pion)) {
+            out.println("Pion supprimé du joueur " + this.color);
+        } else {
+            out.println("Erreur: Pion non trouvé pour suppression.");
+        }
     }
 
-    // Obtient la liste des pions
     public List<Pion> getPions() {
         return pions;
     }
 
-    public Pion getPionAt(int x, int y) {
-        out.println("Obtention du pion à (" + x + ", " + y + ")...");
-        for (Pion pion : pions) {
-            if (pion.getPosX() == x && pion.getPosY() == y) {
-                out.println("Pion trouvé à (" + x + ", " + y + ").");
-                return pion;
-            }
-        }
-        out.println("Aucun pion trouvé à (" + x + ", " + y + ").");
-        return null; // Retourne null si aucun pion n'est trouvé aux coordonnées données
-    }
-
-    public String getColor() {
+    public String getColor()     {
         return color;
     }
 }

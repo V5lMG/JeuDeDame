@@ -62,7 +62,6 @@ public class Partie {
             int oldY = pionSelectionne.getPosY();
             plateau.deplacerPion(pionSelectionne, x, y);
 
-            // Vérifier s'il y a une capture
             if (Math.abs(oldX - x) == 2 && Math.abs(oldY - y) == 2) {
                 Pion pionCapture = getPionBetween(oldX, oldY, x, y);
                 if (pionCapture != null) {
@@ -116,7 +115,6 @@ public class Partie {
     public Pion getPionBetween(int startX, int startY, int endX, int endY) {
         int midX = (startX + endX) / 2;
         int midY = (startY + endY) / 2;
-        out.println(joueurActuel.getPionAt(midX, midY));
-        return joueurActuel.getPionAt(midX, midY);
+        return getPionAt(midX, midY);
     }
 }
