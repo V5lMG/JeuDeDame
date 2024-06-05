@@ -10,13 +10,13 @@ import javafx.scene.layout.Pane;
 import static java.lang.System.out;
 
 public class Controleur {
-    @FXML private GridPane gameGrid;
+    @FXML public GridPane gameGrid;
     private Partie partie;
     private ImageView selectedPionImageView;
     private Pion selectedPion;
 
     @FXML
-    public void initialize() {
+    public void Controleur() {
         out.println("Initialisation du contrôleur...");
         partie = new Partie();
         drawInitialBoard();
@@ -51,6 +51,7 @@ public class Controleur {
         ImageView imageView = new ImageView(pion.getImage());
         imageView.setFitWidth(50);
         imageView.setFitHeight(50);
+        imageView.setSmooth(true);
         imageView.setOnMouseClicked(this::onPionClicked);
         GridPane.setConstraints(imageView, x, y);
         gameGrid.add(imageView, x, y);
@@ -69,11 +70,12 @@ public class Controleur {
 
             out.println("Case cliquée à (" + x + ", " + y + ").");
 
-            // Vérifier si le joueur actuel doit capturer
-            if (partie.hasCaptureMove(partie.getJoueurActuel())) {
-                out.println("Vous devez capturer avec un pion.");
-                highlightPionsForCapture();
-                return;
+            if (selectedPion != null && partie.hasCaptureMove(partie.getJoueurActuel())) {
+                if (!partie.canCapture(selectedPion)) {
+                    out.println("Le pion sélectionné ne peut pas capturer.");
+                    highlightPionsForCapture();
+                    return;
+                }
             }
 
             Pion pionSurCase = partie.getPionAt(x, y);
@@ -131,18 +133,53 @@ public class Controleur {
         selectedPionImageView = imageView;
         partie.selectionnerPion(pion.getPosX(), pion.getPosY());
         highlightPion(imageView);
-        //out.println("Pion sélectionné.");
     }
 
     private void attemptMove(int newX, int newY) {
         out.println("Tentative de déplacement du pion vers (" + newX + ", " + newY + ")...");
+
+        int oldX = selectedPion.getPosX();
+        int oldY = selectedPion.getPosY();
+
         if (partie.deplacerPion(newX, newY)) {
             movePion(selectedPionImageView, newX, newY);
+
+            if (Math.abs(newX - oldX) == 2 && Math.abs(newY - oldY) == 2) {
+                Pion capturedPion = partie.getPionBetween(oldX, oldY, newX, newY);
+                if (capturedPion != null) {
+                    removePionFromView(capturedPion);
+                    partie.capturerPion(capturedPion);
+                    out.println("Pion capturé et retiré du plateau.");
+                }
+            }
+
             deselectPion();
             partie.changerJoueur();
             out.println("Pion déplacé avec succès.");
         } else {
             out.println("Tentative de déplacement invalide.");
+        }
+    }
+
+    public void removePionFromView(Pion capturedPion) {
+        Node nodeToRemove = null;
+        out.println("Tentative de suppression du pion en vue à (" + capturedPion.getPosX() + ", " + capturedPion.getPosY() + ")...");
+        for (Node node : gameGrid.getChildren()) {
+            if (node instanceof ImageView) {
+                Integer xPane = GridPane.getColumnIndex(node);
+                Integer yPane = GridPane.getRowIndex(node);
+                out.println("Vérification du Node à (" + xPane + ", " + yPane + ")...");
+                if (xPane != null && yPane != null && xPane == capturedPion.getPosX() && yPane == capturedPion.getPosY()) {
+                    nodeToRemove = node;
+                    break;
+                }
+            }
+        }
+        if (nodeToRemove != null) {
+            gameGrid.getChildren().remove(nodeToRemove);
+            out.println("Pion retiré de la vue.");
+        } else {
+            out.println("Pas de Node à supprimer pour les coordonnées (" + capturedPion.getPosX() + ", " + capturedPion.getPosY() + ").");
         }
     }
 

@@ -73,12 +73,6 @@ public class Pion {
         return color;
     }
 
-    public void setColor(String color) {
-        System.out.println("Définir la couleur du pion à " + color + "...");
-        this.color = color;
-        System.out.println("Couleur du pion définie.");
-    }
-
     // Méthode pour promouvoir le pion en dame
     public void promouvoir() {
         System.out.println("Promotion du pion en dame...");

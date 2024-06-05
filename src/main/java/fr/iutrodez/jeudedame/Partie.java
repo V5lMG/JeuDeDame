@@ -44,8 +44,8 @@ public class Partie {
 
     public void selectionnerPion(int x, int y) {
         out.println("Sélection du pion à (" + x + ", " + y + ")...");
-        Pion pion = joueurActuel.getPionAt(x, y);
-        if (pion != null) {
+        Pion pion = getPionAt(x, y);
+        if (pion != null && pion.getColor().equals(joueurActuel.getColor())) {
             pionSelectionne = pion;
             out.println("Pion sélectionné.");
             return;
@@ -53,25 +53,32 @@ public class Partie {
         out.println("Aucun pion à sélectionner.");
     }
 
-    public boolean deplacerPion(int newX, int newY) {
-        out.println("Déplacement du pion vers (" + newX + ", " + newY + ")...");
-        if (pionSelectionne == null) {
-            out.println("Erreur : Aucun pion n'a été sélectionné.");
+    public boolean deplacerPion(int x, int y) {
+        if (pionSelectionne == null || !isWithinBounds(x, y)) {
             return false;
         }
-        if (plateau.estDeplacementValide(pionSelectionne, newX, newY)) {
-            plateau.deplacerPion(pionSelectionne, newX, newY);
-            out.println("Pion déplacé avec succès.");
+        if (plateau.estDeplacementValide(pionSelectionne, x, y)) {
+            int oldX = pionSelectionne.getPosX();
+            int oldY = pionSelectionne.getPosY();
+            plateau.deplacerPion(pionSelectionne, x, y);
+
+            // Vérifier s'il y a une capture
+            if (Math.abs(oldX - x) == 2 && Math.abs(oldY - y) == 2) {
+                Pion pionCapture = getPionBetween(oldX, oldY, x, y);
+                if (pionCapture != null) {
+                    capturerPion(pionCapture);
+                }
+            }
+
             pionSelectionne = null;
             return true;
         }
-        out.println("Déplacement invalide : Partie.java");
         return false;
     }
 
     public boolean hasCaptureMove(Joueur joueur) {
         for (Pion pion : joueur.getPions()) {
-            if (plateau.peutCapturer(pion)) {
+            if (canCapture(pion)) {
                 return true;
             }
         }
@@ -79,6 +86,37 @@ public class Partie {
     }
 
     public boolean canCapture(Pion pion) {
-        return plateau.peutCapturer(pion);
+        int x = pion.getPosX();
+        int y = pion.getPosY();
+
+        int[][] directions = {{-2, -2}, {-2, 2}, {2, -2}, {2, 2}};
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+            int midX = x + direction[0] / 2;
+            int midY = y + direction[1] / 2;
+
+            if (isWithinBounds(newX, newY) && plateau.getPion(newX, newY) == null &&
+                    plateau.getPion(midX, midY) != null && !plateau.getPion(midX, midY).getColor().equals(pion.getColor())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isWithinBounds(int x, int y) {
+        return x >= 0 && x < 10 && y >= 0 && y < 10;
+    }
+
+    public void capturerPion(Pion pion) {
+        Joueur joueur = pion.getColor().equals("NOIR") ? getJoueurNoir() : getJoueurBlanc();
+        joueur.retirerPion(pion);
+    }
+
+    public Pion getPionBetween(int startX, int startY, int endX, int endY) {
+        int midX = (startX + endX) / 2;
+        int midY = (startY + endY) / 2;
+        out.println(joueurActuel.getPionAt(midX, midY));
+        return joueurActuel.getPionAt(midX, midY);
     }
 }

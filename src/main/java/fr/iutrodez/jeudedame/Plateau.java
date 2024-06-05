@@ -16,8 +16,8 @@ public class Plateau {
             }
         }
 
-        String blackImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/pion_noir.png";
-        String whiteImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/pion_blanc.png";
+        String blackImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/image/pion_noir.png";
+        String whiteImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/image/pion_blanc.png";
 
         initialiserPions(joueurNoir, 0, 3, "NOIR", blackImageUrl);
         initialiserPions(joueurBlanc, 6, 9, "BLANC", whiteImageUrl);
@@ -89,7 +89,7 @@ public class Plateau {
 
             // Déplacement normal
             if (Math.abs(dx) == 1 && Math.abs(dy) == 1 && ((pion.getColor().equals("NOIR") && dy == 1) || (pion.getColor().equals("BLANC") && dy == -1))) {
-                return !doitCapturer(pion.getColor());
+                return true;
             }
         }
 
@@ -132,10 +132,10 @@ public class Plateau {
         int oldX = pion.getPosX();
         int oldY = pion.getPosY();
 
-        // Vider la case d'origine
         cases[oldY][oldX].setPion(null);
 
         if (Math.abs(newX - oldX) == 2 && Math.abs(newY - oldY) == 2) {
+            // Calculer la position intermédiaire
             int midX = (newX + oldX) / 2;
             int midY = (newY + oldY) / 2;
             Pion capturedPion = cases[midY][midX].getPion();
@@ -147,13 +147,10 @@ public class Plateau {
             }
         }
 
-        // Mettre à jour la position du pion
         pion.setPosX(newX);
         pion.setPosY(newY);
         cases[newY][newX].setPion(pion);
-
         verifierPromotion(pion);
-
         out.println("Pion déplacé de (" + oldX + ", " + oldY + ") à (" + newX + ", " + newY + ").");
     }
 
@@ -162,30 +159,5 @@ public class Plateau {
                 (pion.getColor().equals("BLANC") && pion.getPosY() == 0)) {
             pion.promouvoir();
         }
-    }
-
-    private boolean doitCapturer(String pionColor) {
-        Joueur joueur = pionColor.equals("NOIR") ? joueurNoir : joueurBlanc;
-        for (Pion pion : joueur.getPions()) {
-            if (peutCapturer(pion)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean peutCapturer(Pion pion) {
-        int x = pion.getPosX();
-        int y = pion.getPosY();
-        int[][] directions = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
-
-        for (int[] direction : directions) {
-            int newX = x + 2 * direction[0];
-            int newY = y + 2 * direction[1];
-            if (estDeplacementValide(pion, newX, newY)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
