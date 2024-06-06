@@ -55,9 +55,6 @@ public class AccueilControleur {
         Partie partie = new Partie();
         File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/plateau/jeu-dame.fxml");
         URL plateauUrl = fxmlFile.toURI().toURL();
-        if (plateauUrl == null) {
-            throw new IOException("Le fichier FXML est introuvable");
-        }
         FXMLLoader fxmlLoader = new FXMLLoader(plateauUrl);
 
         Scene scene = new Scene(fxmlLoader.load());

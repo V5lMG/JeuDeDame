@@ -37,7 +37,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="76.0" prefWidth="76.0" styleClass="image-button">
                      <children>
-                        <ImageView fx:id="boutonAmpoule" fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" styleClass="image-style">
+                        <ImageView fx:id="help" fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" styleClass="image-style">
                            <image>
                               <Image url="@../image/ampoule.png" />
                            </image>
@@ -77,16 +77,25 @@
                      <children>
                         <Label text="Nouvelle Partie" />
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </VBox.margin>
                   </HBox>
                   <HBox fx:id="load" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="card">
                      <children>
                         <Label text="Charger une Partie" />
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </VBox.margin>
                   </HBox>
                   <HBox fx:id="quit" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="card">
                      <children>
                         <Label text="Quitter le Jeu" />
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
                <opaqueInsets>

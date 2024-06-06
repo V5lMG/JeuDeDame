@@ -22,9 +22,6 @@ public class Jeu extends Application {
     public void start(Stage stage) throws IOException {
         File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/accueil/page-accueil.fxml");
         URL accueilUrl = fxmlFile.toURI().toURL();
-        if (accueilUrl == null) {
-            throw new IOException("Le fichier FXML est introuvable");
-        }
         FXMLLoader fxmlLoader = new FXMLLoader(accueilUrl);
 
         Scene scene = new Scene(fxmlLoader.load());

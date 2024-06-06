@@ -61,15 +61,19 @@
     -fx-effect: innershadow(gaussian, rgba(0,0,0,0.25), 0, 0, 0, 4);
 }
 
+.card:hover {
+    -fx-background-color: -fx-dark-green-color;
+}
+
 .button-txt {
     -fx-background-color: -fx-green-color;
-    -fx-text-fill: black; /* Texte blanc */
-    -fx-font-size: 14px; /* Taille de la police */
-    -fx-padding: 10px 20px; /* Padding interne */
-    -fx-border-color: -fx-white-color; /* Bordure blanche */
-    -fx-border-width: 2px; /* Largeur de la bordure */
-    -fx-border-radius: 15px; /* Bordure arrondie */
-    -fx-background-radius: 15px; /* Fond arrondi */
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-color: -fx-white-color;
+    -fx-border-width: 2px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
 }
 
 .button-txt:hover {
