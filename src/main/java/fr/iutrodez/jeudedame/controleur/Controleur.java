@@ -2,6 +2,9 @@ package fr.iutrodez.jeudedame.controleur;
 
 import fr.iutrodez.jeudedame.modele.Partie;
 import fr.iutrodez.jeudedame.modele.Pion;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -11,16 +14,24 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.lang.System.out;
 
 public class Controleur {
     @FXML public GridPane gameGrid;
     @FXML private List<Pion> captureReadyPions = new ArrayList<>();
+    @FXML private Label nombreDePionNoir;
+    @FXML private Label nombreDePionBlanc;
     @FXML private Label playerTurnLabel;
+    @FXML private Label chronometre;
+    private Timer timer;
+    private long startTime;
     private Partie partie;
     private ImageView selectedPionImageView;
     private Pion selectedPion;
@@ -29,7 +40,31 @@ public class Controleur {
     public void initialize() {
         out.println("Initialisation du contrôleur...");
         partie = new Partie();
+        setupChronometer();
         drawInitialBoard();
+    }
+
+    public void setupChronometer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new Timer();
+        startTime = System.currentTimeMillis();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> updateChronometer());
+            }
+        }, 0, 1000);
+    }
+
+    private void updateChronometer() {
+        long now = System.currentTimeMillis();
+        long elapsedMillis = now - startTime;
+        int seconds = (int) (elapsedMillis / 1000) % 60;
+        int minutes = (int) ((elapsedMillis / (1000 * 60)) % 60);
+        int hours = (int) ((elapsedMillis / (1000 * 60 * 60)) % 24);
+        chronometre.setText(String.format("%02d : %02d : %02d", hours, minutes, seconds));
     }
 
     private void drawInitialBoard() {
@@ -113,13 +148,8 @@ public class Controleur {
         updateCaptureReadyPions();
 
         if (clickedPion != null && clickedPion.getColor().equals(partie.getJoueurActuel().getColor())) {
-            if (!captureReadyPions.isEmpty()) {
-                if (captureReadyPions.contains(clickedPion)) {
-                    selectPion(clickedImageView, clickedPion);
-                    highlightLegalMoves(clickedPion);
-                } else {
-                    out.println("Ce pion ne peut pas bouger maintenant. Veuillez sélectionner un pion qui peut capturer.");
-                }
+            if (!captureReadyPions.isEmpty() && !captureReadyPions.contains(clickedPion)) {
+                out.println("This pawn cannot move now. Please select a pawn that can capture.");
             } else {
                 selectPion(clickedImageView, clickedPion);
                 highlightLegalMoves(clickedPion);
@@ -148,11 +178,13 @@ public class Controleur {
         out.println("Sélection du pion à (" + pion.getPosX() + ", " + pion.getPosY() + ")...");
         selectedPion = pion;
         selectedPionImageView = imageView;
+        imageView.getStyleClass().add("highlighted-pion");
         partie.selectionnerPion(pion.getPosX(), pion.getPosY());
-        highlightPion(imageView);
         out.println("Pion sélectionné et mouvements possibles affichés.");
     }
 
+    // TODO surligner les cases de destinations quand on mange vers l'arrière
+    // TODO afficher le surlignage quand on clique sur un pion
     private void highlightLegalMoves(Pion pion) {
         removeAllHighlight();
         List<int[]> legalMoves = partie.getPlateau().getLegalMoves(pion);
@@ -174,6 +206,7 @@ public class Controleur {
                     ImageView capturePionImageView = findPionImageViewAt(midX, midY);
                     if (capturePionImageView != null) {
                         capturePionImageView.getStyleClass().add("highlight-capture");
+                        out.println(capturePionImageView.getStyleClass().add("highlight-capture"));
                         System.out.println("Highlighted capture à: [" + midX + ", " + midY + "]");
                     } else {
                         System.out.println("ImageView introuvable pour la capture à [" + midX + ", " + midY + "]");
@@ -189,8 +222,10 @@ public class Controleur {
         for (Pion pion : captureReadyPions) {
             ImageView pionView = findPionImageViewAt(pion.getPosX(), pion.getPosY());
             if (pionView != null) {
-                highlightPion(pionView);
-            }
+                pionView.getStyleClass().add("highlighted-pion");
+            } else {
+            System.out.println("ImageView introuvable pour le pion");
+        }
         }
     }
 
@@ -220,17 +255,25 @@ public class Controleur {
         if (partie.deplacerPion(newX, newY)) {
             movePion(selectedPionImageView, newX, newY);
             updateCaseOnMove(oldX, oldY, newX, newY);
-            String color = partie.getJoueurActuel().getColor();
-            playerTurnLabel.setText("Tour : " + getInvertedColor(color));
-            partie.changerJoueur();
-            out.println("Pion déplacé avec succès.");
+            if (Math.abs(newX - oldX) == 2 && checkForAdditionalCaptures(newX, newY)) {
+                out.println("Additional captures possible, le joueur devrait continuer.");
+                selectPion(selectedPionImageView, selectedPion);
+                highlightLegalMoves(selectedPion);
+            } else {
+                changePlayerTurn();
+            }
         } else {
             out.println("Tentative de déplacement invalide.");
         }
     }
 
-    private String getInvertedColor(String color) {
-        return color.equals("NOIR") ? "BLANC" : "NOIR";
+    private boolean checkForAdditionalCaptures(int x, int y) {
+        Pion pion = partie.getPlateau().getPion(x, y);
+        if (pion != null) {
+            List<int[]> captureMoves = partie.getPlateau().getLegalMoves(pion);
+            return captureMoves.stream().anyMatch(move -> Math.abs(move[0] - x) == 2);
+        }
+        return false;
     }
 
     private void updateCaseOnMove(int oldX, int oldY, int newX, int newY) {
@@ -250,6 +293,25 @@ public class Controleur {
         }
     }
 
+    private void changePlayerTurn() {
+        partie.changerJoueur();
+        String color = partie.getJoueurActuel().getColor();
+        nombreDePionNoir.setText("Pion restant : " + partie.getJoueurNoir().getPions().stream().count());
+        nombreDePionBlanc.setText("Pion restant : " + partie.getJoueurBlanc().getPions().stream().count());
+        playerTurnLabel.setText("Tour : " + color);
+        out.println("Tour changé à " + color + ".");
+        deselectPion();
+    }
+
+    private void deselectPion() {
+        if (selectedPionImageView != null) {
+            selectedPionImageView.getStyleClass().remove("highlighted-pion");
+            selectedPionImageView = null;
+            selectedPion = null;
+        }
+        removeAllHighlight();
+    }
+
     public void removePionFromView(Pion capturedPion) {
         for (Node node : gameGrid.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == capturedPion.getPosX() && GridPane.getRowIndex(node) == capturedPion.getPosY()) {
@@ -267,11 +329,6 @@ public class Controleur {
         out.println("Pion déplacé en vue.");
     }
 
-    private void highlightPion(ImageView pion) {
-        out.println("Surligner le pion...");
-        pion.getStyleClass().add("highlighted-pion");
-    }
-
     public void setPartie(Partie partie) {
         out.println("Définir une nouvelle partie...");
         this.partie = partie;
@@ -285,4 +342,5 @@ public class Controleur {
             node.setStyle("");
         }
     }
+
 }

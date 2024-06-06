@@ -34,4 +34,8 @@ public class Joueur {
     public String getColor()     {
         return color;
     }
+
+    public int getNombreDePions() {
+        return pions.size();
+    }
 }

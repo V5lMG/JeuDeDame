@@ -125,6 +125,6 @@ public class Partie {
                 }
             }
         }
-        return pions.toArray(new Pion[0]); // Return as an array of Pions
+        return pions.toArray(new Pion[0]);
     }
 }

@@ -1,5 +1,7 @@
 package fr.iutrodez.jeudedame.modele;
 
+import javafx.application.Platform;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -67,47 +69,29 @@ public class Plateau {
     }
 
     public boolean estDeplacementValide(Pion pion, int newX, int newY) {
-        if (!isWithinBounds(newX, newY) || cases[newY][newX].estOccupee()) {
+        if (!isWithinBounds(newX, newY)) {
             return false;
         }
-
-        int dx = Math.abs(newX - pion.getPosX());
-        int dy = Math.abs(newY - pion.getPosY());
-
-        if (!pion.isDame()) {
-            if ((pion.getColor().equals("NOIR") && newY > pion.getPosY()) ||
-                    (pion.getColor().equals("BLANC") && newY < pion.getPosY())) {
-                out.println("Déplacement invalide : les pions ne peuvent pas reculer.");
-                return false;
-            }
+        int dx = newX - pion.getPosX();
+        int dy = newY - pion.getPosY();
+        int absDx = Math.abs(dx);
+        int absDy = Math.abs(dy);
+        if (absDx != absDy) {
+            return false;
+        }
+        if (cases[newY][newX].estOccupee()) {
+            return false;
+        }
+        if (absDx == 1) {
+            return pion.isDame() || (pion.getColor().equals("NOIR") && dy == -1) || (pion.getColor().equals("BLANC") && dy == 1);
+        } else if (absDx == 2) {
+            int midX = pion.getPosX() + dx / 2;
+            int midY = pion.getPosY() + dy / 2;
+            Pion midPion = cases[midY][midX].getPion();
+            return midPion != null && !midPion.getColor().equals(pion.getColor());
         }
 
-        if (pion.isDame()) {
-            return dx == dy && cheminLibre(pion.getPosX(), pion.getPosY(), newX, newY);
-        } else {
-            return (dx == 1 && dy == 1) || (dx == 2 && dy == 2 && caseIntermediaireContientAdversaire(pion, newX, newY));
-        }
-    }
-
-    private boolean cheminLibre(int startX, int startY, int endX, int endY) {
-        int dx = Integer.signum(endX - startX);
-        int dy = Integer.signum(endY - startY);
-        int distance = Math.abs(endX - startX);
-        for (int step = 1; step < distance; step++) {
-            int x = startX + step * dx;
-            int y = startY + step * dy;
-            if (cases[y][x].estOccupee()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean caseIntermediaireContientAdversaire(Pion pion, int newX, int newY) {
-        int midX = (pion.getPosX() + newX) / 2;
-        int midY = (pion.getPosY() + newY) / 2;
-        Pion midPion = getPion(midX, midY);
-        return midPion != null && !midPion.getColor().equals(pion.getColor());
+        return false;
     }
 
     public void deplacerPion(Pion pion, int newX, int newY) {
@@ -135,12 +119,32 @@ public class Plateau {
 
         verifierPromotion(pion);
         out.println("Pion déplacé de (" + pion.getPosX() + ", " + pion.getPosY() + ") à (" + newX + ", " + newY + ")");
+
+        // Vérification de la fin de la partie
+        Joueur gagnant = verifierFinDePartie();
+        if (gagnant != null) {
+            out.println("La partie est terminée. Le gagnant est " + gagnant.getColor());
+            stopChronometer(true);
+        }
+    }
+
+    public boolean stopChronometer(boolean stopSignal) {
+        return stopSignal;
     }
 
     public void verifierPromotion(Pion pion) {
         if ((pion.getColor().equals("NOIR") && pion.getPosY() == 9) || (pion.getColor().equals("BLANC") && pion.getPosY() == 0)) {
             pion.promouvoir();
         }
+    }
+
+    private Joueur verifierFinDePartie() {
+        if (joueurNoir.getNombreDePions() == 0) {
+            return joueurBlanc;  // Joueur blanc a gagné
+        } else if (joueurBlanc.getNombreDePions() == 0) {
+            return joueurNoir;  // Joueur noir a gagné
+        }
+        return null;  // La partie continue
     }
 
     public List<int[]> getLegalMoves(Pion pion) {
