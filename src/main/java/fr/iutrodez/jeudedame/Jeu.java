@@ -1,7 +1,6 @@
 package fr.iutrodez.jeudedame;
 
-import fr.iutrodez.jeudedame.controleur.Controleur;
-import fr.iutrodez.jeudedame.modele.Partie;
+import fr.iutrodez.jeudedame.controleur.AccueilControleur;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static java.lang.System.out;
+
 public class Jeu extends Application {
 
     public static void main(String[] args) {
@@ -19,24 +20,32 @@ public class Jeu extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Partie partie = new Partie();
-        File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/plateau/jeu-dame.fxml");
-        URL fxmlUrl = fxmlFile.toURI().toURL();
-        FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-
-        if (fxmlLoader.getLocation() == null) {
-            throw new IOException("URL du fxml invalide");
+        File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/accueil/page-accueil.fxml");
+        URL accueilUrl = fxmlFile.toURI().toURL();
+        if (accueilUrl == null) {
+            throw new IOException("Le fichier FXML est introuvable");
         }
+        FXMLLoader fxmlLoader = new FXMLLoader(accueilUrl);
 
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.setTitle("Jeu de Dames");
         stage.show();
 
-        Controleur controller = fxmlLoader.getController();
-        controller.setPartie(partie);
-        controller.initialize();
+        AccueilControleur accueilControleur = fxmlLoader.getController();
 
-        System.out.println("La partie commence !");
+        accueilControleur.getStartHBox().setOnMouseClicked(event -> {
+            try {
+                accueilControleur.lancerJeu(stage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        accueilControleur.getQuitHBox().setOnMouseClicked(event -> {
+            stage.close();
+        });
+
+        out.println("L'application est lancée");
     }
 }
