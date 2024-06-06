@@ -110,11 +110,6 @@ public class Plateau {
         return midPion != null && !midPion.getColor().equals(pion.getColor());
     }
 
-    public void supprimerPion(Pion pion) {
-        cases[pion.getPosY()][pion.getPosX()].setPion(null);
-        out.println("Pion supprimé du modèle");
-    }
-
     public void deplacerPion(Pion pion, int newX, int newY) {
         if (!estDeplacementValide(pion, newX, newY)) {
             out.println("Déplacement invalide.");

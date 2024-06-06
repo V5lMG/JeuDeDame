@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -19,6 +20,7 @@ import static java.lang.System.out;
 public class Controleur {
     @FXML public GridPane gameGrid;
     @FXML private List<Pion> captureReadyPions = new ArrayList<>();
+    @FXML private Label playerTurnLabel;
     private Partie partie;
     private ImageView selectedPionImageView;
     private Pion selectedPion;
@@ -218,11 +220,17 @@ public class Controleur {
         if (partie.deplacerPion(newX, newY)) {
             movePion(selectedPionImageView, newX, newY);
             updateCaseOnMove(oldX, oldY, newX, newY);
+            String color = partie.getJoueurActuel().getColor();
+            playerTurnLabel.setText("Tour : " + getInvertedColor(color));
             partie.changerJoueur();
             out.println("Pion déplacé avec succès.");
         } else {
             out.println("Tentative de déplacement invalide.");
         }
+    }
+
+    private String getInvertedColor(String color) {
+        return color.equals("NOIR") ? "BLANC" : "NOIR";
     }
 
     private void updateCaseOnMove(int oldX, int oldY, int newX, int newY) {

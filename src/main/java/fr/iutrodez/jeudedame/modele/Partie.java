@@ -27,7 +27,6 @@ public class Partie {
     }
 
     public void changerJoueur() {
-        out.println("Changement de joueur...");
         joueurActuel = (joueurActuel == joueurNoir) ? joueurBlanc : joueurNoir;
         out.println("C'est maintenant au tour du joueur " + joueurActuel.getColor() + ".");
     }
