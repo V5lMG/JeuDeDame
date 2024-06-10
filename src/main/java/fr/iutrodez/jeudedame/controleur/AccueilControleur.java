@@ -53,9 +53,8 @@ public class AccueilControleur {
 
     public void lancerJeu(Stage stage) throws IOException {
         Partie partie = new Partie();
-        File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/plateau/jeu-dame.fxml");
-        URL plateauUrl = fxmlFile.toURI().toURL();
-        FXMLLoader fxmlLoader = new FXMLLoader(plateauUrl);
+        URL accueilUrl = getClass().getResource("/fr/iutrodez/jeudedame/vue/plateau/jeu-dame.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(accueilUrl);
 
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);

@@ -25,9 +25,7 @@ public class Pion {
     private void loadImage(String imagePath) {
         System.out.println("Chargement de l'image pour le pion...");
         try {
-            File imageFile = new File(imagePath);
-            URL imageUrl = imageFile.toURI().toURL();
-            this.image = new Image(imageUrl.openStream());
+            this.image = new Image(imagePath);
             System.out.println("Image chargée avec succès pour le pion en [" + posX + "," + posY + "]");
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement de l'image : " + imagePath);

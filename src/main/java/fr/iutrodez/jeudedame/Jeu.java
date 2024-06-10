@@ -20,8 +20,7 @@ public class Jeu extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        File fxmlFile = new File("src/main/java/fr/iutrodez/jeudedame/vue/accueil/page-accueil.fxml");
-        URL accueilUrl = fxmlFile.toURI().toURL();
+        URL accueilUrl = getClass().getResource("/fr/iutrodez/jeudedame/vue/accueil/page-accueil.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(accueilUrl);
 
         Scene scene = new Scene(fxmlLoader.load());

@@ -2,8 +2,6 @@ package fr.iutrodez.jeudedame.controleur;
 
 import fr.iutrodez.jeudedame.modele.Partie;
 import fr.iutrodez.jeudedame.modele.Pion;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -14,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,8 +175,8 @@ public class Controleur {
         out.println("Sélection du pion à (" + pion.getPosX() + ", " + pion.getPosY() + ")...");
         selectedPion = pion;
         selectedPionImageView = imageView;
-        imageView.getStyleClass().add("highlighted-pion");
         partie.selectionnerPion(pion.getPosX(), pion.getPosY());
+        selectedPionImageView.getStyleClass().add("highlighted-pion");
         out.println("Pion sélectionné et mouvements possibles affichés.");
     }
 
@@ -187,6 +184,8 @@ public class Controleur {
     // TODO afficher le surlignage quand on clique sur un pion
     private void highlightLegalMoves(Pion pion) {
         removeAllHighlight();
+        ImageView imageView = new ImageView(pion.getImage());
+        imageView.getStyleClass().add("highlighted-pion");
         List<int[]> legalMoves = partie.getPlateau().getLegalMoves(pion);
         System.out.println("Mouvement legal trouvé : " + legalMoves.size());
         for (int[] move : legalMoves) {
@@ -296,8 +295,8 @@ public class Controleur {
     private void changePlayerTurn() {
         partie.changerJoueur();
         String color = partie.getJoueurActuel().getColor();
-        nombreDePionNoir.setText("Pion restant : " + partie.getJoueurNoir().getPions().stream().count());
-        nombreDePionBlanc.setText("Pion restant : " + partie.getJoueurBlanc().getPions().stream().count());
+        nombreDePionNoir.setText("Pion restant : " + (long) partie.getJoueurNoir().getPions().size());
+        nombreDePionBlanc.setText("Pion restant : " + (long) partie.getJoueurBlanc().getPions().size());
         playerTurnLabel.setText("Tour : " + color);
         out.println("Tour changé à " + color + ".");
         deselectPion();
@@ -333,7 +332,6 @@ public class Controleur {
         out.println("Définir une nouvelle partie...");
         this.partie = partie;
         drawInitialBoard();
-        out.println("Nouvelle partie définie.");
     }
 
     private void removeAllHighlight() {

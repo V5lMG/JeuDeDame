@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="1366.0" styleClass="background" stylesheets="@pageAccueuil.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iutrodez.jeudedame.controleur.AccueilControleur">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <HBox prefHeight="284.0" prefWidth="377.0" stylesheets="@../plateau/jeuDame.css">
+               <children>
+                  <Label styleClass="titre-application" text="EasyCheckers" textFill="TRANSPARENT">
+                     <font>
+                        <Font size="31.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="990.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="76.0" prefWidth="76.0" styleClass="image-button">
+                     <children>
+                        <ImageView fx:id="help" fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" styleClass="image-style">
+                           <image>
+                              <Image url="@../image/ampoule.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox prefHeight="76.0" prefWidth="76.0" styleClass="image-button">
+                     <children>
+                        <ImageView fx:id="boutonEngrenage" fitHeight="56.0" fitWidth="56.0" styleClass="image-style">
+                           <image>
+                              <Image url="@../image/parametre.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </HBox.margin>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="768.0" prefWidth="1366.0" stylesheets="@pageAccueuil.css">
+         <children>
+            <VBox alignment="CENTER" prefHeight="663.0" prefWidth="176.0" stylesheets="@pageAccueuil.css">
+               <children>
+                  <HBox fx:id="start" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="card">
+                     <children>
+                        <Label text="Nouvelle Partie" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="load" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="card">
+                     <children>
+                        <Label text="Charger une Partie" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="quit" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="card">
+                     <children>
+                        <Label text="Quitter le Jeu" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

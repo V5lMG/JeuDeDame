@@ -26,8 +26,8 @@ public class Plateau {
         this.joueurNoir = joueurNoir;
         this.joueurBlanc = joueurBlanc;
 
-        String blackImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/image/pion_noir.png";
-        String whiteImageUrl = "src/main/java/fr/iutrodez/jeudedame/vue/image/pion_blanc.png";
+        String blackImageUrl = getClass().getResource("/fr/iutrodez/jeudedame/vue/image/pion_noir.png").toExternalForm();
+        String whiteImageUrl = getClass().getResource("/fr/iutrodez/jeudedame/vue/image/pion_blanc.png").toExternalForm();
 
 
         initialiserPions(joueurBlanc, 0, 3, "BLANC", whiteImageUrl);
